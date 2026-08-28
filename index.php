@@ -1,3 +1,17 @@
+<?php
+
+session_start();
+
+require 'db.php';
+
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
+
+$stmt = $pdo->query("SELECT * FROM products");
+$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+?>
 <!DOCTYPE html>
 
 <html lang="en">
@@ -46,7 +60,17 @@
                 <span class="price">
                     <?= htmlspecialchars($product['price']) ?> €
                 </span>
+                <form action="cart.php" method="post">
+    <input
+        type="hidden"
+        name="product_id"
+        value="<?= $product['id'] ?>"
+    >
 
+    <button type="submit">
+        Add to cart
+    </button>
+</form>
             </div>
 
         <?php endforeach; ?>
